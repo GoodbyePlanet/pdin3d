@@ -36,7 +36,7 @@ function PDLogo(props) {
   const { nodes } = useGLTF('/pd-lp-1.1.glb');
   return (
     <group {...props} dispose={null}>
-      <Sparkles count={2000} scale={[20, 20, 10]} size={1.5} speed={2} />
+      <Sparkles count={1000} scale={[20, 20, 10]} size={1.5} speed={2} />
       <mesh
         geometry={nodes.Curve.geometry}
         material={glowBlue}
@@ -48,7 +48,7 @@ function PDLogo(props) {
 }
 
 function Ground() {
-  const [floor, normal] = useTexture(['/SurfaceImperfections003_1K_var1.jpg', '/SurfaceImperfections003_1K_Normal.jpg']);
+  const [floor] = useTexture(['/SurfaceImperfections003_1K_var1.jpg', '/SurfaceImperfections003_1K_Normal.jpg']);
   return (
     <mesh position-y={0} rotation-x={-Math.PI / 2}>
       <planeGeometry args={[100, 100]} />
