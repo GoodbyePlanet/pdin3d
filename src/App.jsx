@@ -1,7 +1,7 @@
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Suspense, useState } from 'react';
 import * as THREE from 'three';
-import { Reflector, Sparkles, useGLTF, useTexture } from '@react-three/drei';
+import { MeshReflectorMaterial, Sparkles, useGLTF, useTexture } from '@react-three/drei';
 import { Bloom, EffectComposer } from '@react-three/postprocessing';
 
 function App() {
@@ -36,7 +36,7 @@ function PDLogo(props) {
   const { nodes } = useGLTF('/pd-lp-1.1.glb');
   return (
     <group {...props} dispose={null}>
-      {/*<Sparkles count={500} scale={[20, 20, 20]} size={1.5} speed={2} />*/}
+      <Sparkles count={2000} scale={[20, 20, 10]} size={1.5} speed={2} />
       <mesh
         geometry={nodes.Curve.geometry}
         material={glowBlue}
@@ -50,11 +50,28 @@ function PDLogo(props) {
 function Ground() {
   const [floor, normal] = useTexture(['/SurfaceImperfections003_1K_var1.jpg', '/SurfaceImperfections003_1K_Normal.jpg']);
   return (
-    <Reflector blur={[400, 100]} resolution={512} args={[25, 25]} mirror={0.9} mixBlur={1} mixStrength={1.5}
-               rotation={[-Math.PI / 2, -0, Math.PI / 2]}>
-      {(Material, props) => <Material color="#a6dbf7" metalness={0.4} roughnessMap={floor} normalMap={normal}
-                                      normalScale={[2, 2]} {...props} />}
-    </Reflector>
+    <mesh position-y={0} rotation-x={-Math.PI / 2}>
+      <planeGeometry args={[100, 100]} />
+      <MeshReflectorMaterial
+        // reflectorOffset={-5}
+        roughnessMap={floor}
+        // normalMap={normal}
+        roughness={1.2}
+        resolution={512}
+        blur={[400, 100]}
+        mixBlur={1}
+        depthScale={1}
+        opacity={0.5}
+        transparent
+        minDepthThreshold={0.4}
+        maxDepthThreshold={1.4}
+        color="#333"
+        metalness={0.5}
+        mixStrength={5.5} // Strength of the reflections
+        mixContrast={1} // Contrast of the reflections
+        dithering
+        mirror={0.5} />
+    </mesh>
   );
 }
 
