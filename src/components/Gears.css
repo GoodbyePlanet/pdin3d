@@ -1,0 +1,146 @@
+.wrapper {
+  margin: 0 auto;
+}
+
+.gears {
+  width: 48%;
+  display: inline-block;
+}
+
+.gears:first-child {
+  margin-right: 3%;
+}
+
+.gearsContainer {
+  margin: 0 auto;
+  width: 57px;
+  height: 50px;
+  font-size: 9px;
+  position: relative;
+  top: 7px;
+  left: 15px;
+}
+
+.gearRotate {
+  width: 2em;
+  height: 2em;
+  top: 50%;
+  left: 50%;
+  margin-top: -1em;
+  margin-left: -1em;
+  background: var(--white);
+  position: absolute;
+  border-radius: 1em;
+  -webkit-animation: 1s gearRotate linear infinite;
+  -moz-animation: 1s gearRotate linear infinite;
+  animation: 1s gearRotate linear infinite;
+}
+
+.gearRotateLeft {
+  margin-top: -2.2em;
+  top: 50%;
+  width: 2em;
+  height: 2em;
+  background: var(--white);
+  position: absolute;
+  border-radius: 1em;
+  -webkit-animation: 1s gearRotateLeft linear infinite;
+  -moz-animation: 1s gearRotateLeft linear infinite;
+  animation: 1s gearRotateLeft linear infinite;
+}
+
+.gearRotate::before,
+.gearRotateLeft::before {
+  width: 2.8em;
+  height: 2.8em;
+  background:
+    -webkit-linear-gradient(0deg, transparent 39%, var(--white) 39%, var(--white) 61%, transparent 61%),
+    -webkit-linear-gradient(60deg, transparent 42%, var(--white) 42%, var(--white) 58%, transparent 58%),
+    -webkit-linear-gradient(120deg, transparent 42%, var(--white) 42%, var(--white) 58%, transparent 58%);
+  background:
+    -moz-linear-gradient(0deg, transparent 39%, var(--white) 39%, #ffffff 61%, transparent 61%),
+    -moz-linear-gradient(60deg, transparent 42%, var(--white) 42%, var(--white) 58%, transparent 58%),
+    -moz-linear-gradient(120deg, transparent 42%, var(--white) 42%, var(--white) 58%, transparent 58%);
+  background:
+    -o-linear-gradient(0deg, transparent 39%, var(--white) 39%, var(--white) 61%, transparent 61%),
+    -o-linear-gradient(60deg, transparent 42%, var(--white) 42%, var(--white) 58%, transparent 58%),
+    -o-linear-gradient(120deg, transparent 42%, #ffffff 42%, var(--white) 58%, transparent 58%);
+  background:
+    -ms-linear-gradient(0deg, transparent 39%, var(--white) 39%, var(--white) 61%, transparent 61%),
+    -ms-linear-gradient(60deg, transparent 42%, var(--white) 42%, var(--white) 58%, transparent 58%),
+    -ms-linear-gradient(120deg, transparent 42%, var(--white) 42%, var(--white) 58%, transparent 58%);
+  background: linear-gradient(0deg, transparent 39%, var(--white) 39%, var(--white) 61%, transparent 61%),
+    linear-gradient(60deg, transparent 42%, var(--white) 42%, var(--white) 58%, transparent 58%),
+    linear-gradient(120deg, transparent 42%, var(--white) 42%, var(--white) 58%, transparent 58%);
+  position: absolute;
+  content: '';
+  top: -0.4em;
+  left: -0.4em;
+  border-radius: 1.4em;
+}
+
+.gearRotate::after,
+.gearRotateLeft::after {
+  width: 1em;
+  height: 1em;
+  background: var(--black);
+  position: absolute;
+  content: '';
+  top: 0.5em;
+  left: 0.5em;
+  border-radius: 0.5em;
+}
+
+@-webkit-keyframes gearRotate {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(-180deg);
+  }
+}
+
+@-moz-keyframes gearRotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(-180deg);
+  }
+}
+
+@keyframes gearRotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(-180deg);
+  }
+}
+
+@-webkit-keyframes gearRotateLeft {
+  0% {
+    -webkit-transform: rotate(30deg);
+  }
+  100% {
+    -webkit-transform: rotate(210deg);
+  }
+}
+
+@-moz-keyframes gearRotateLeft {
+  0% {
+    -webkit-transform: rotate(30deg);
+  }
+  100% {
+    -webkit-transform: rotate(210deg);
+  }
+}
+
+@keyframes gearRotateLeft {
+  0% {
+    -webkit-transform: rotate(30deg);
+  }
+  100% {
+    -webkit-transform: rotate(210deg);
+  }
+}

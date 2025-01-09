@@ -1,13 +1,22 @@
-import { Suspense, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
+import * as THREE from 'three';
+import { useAtom } from 'jotai';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { MeshReflectorMaterial, Sparkles, useGLTF, useTexture } from '@react-three/drei';
 import { Bloom, EffectComposer, Glitch, Noise } from '@react-three/postprocessing';
 import { GlitchMode } from 'postprocessing';
-import * as THREE from 'three';
 import { useGlitch } from './hooks/glitch.js';
+import { isSceneLoadedAtom } from './atoms.js';
 
 function App() {
   const glitchActive = useGlitch();
+  const [__, setSceneLoaded] = useAtom(isSceneLoadedAtom);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setSceneLoaded(true);
+    }, 2700);
+  }, []);
 
   return (
     <Canvas concurrent gl={{ alpha: false }} camera={{ position: [0, 3, 100], fov: 30 }}>
@@ -22,7 +31,7 @@ function App() {
           <Bloom mipmapBlur intensity={1.2} />
           <Glitch
             active={glitchActive}
-            delay={[0.5, 1.5]}
+            delay={[1.5, 3.5]}
             duration={[0.6, 1.0]}
             strength={[0.1, 0.2]}
             mode={GlitchMode.CONSTANT_MILD}
