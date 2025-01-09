@@ -1,13 +1,16 @@
-import { Canvas, useFrame } from '@react-three/fiber';
 import { Suspense, useState } from 'react';
-import * as THREE from 'three';
+import { Canvas, useFrame } from '@react-three/fiber';
 import { MeshReflectorMaterial, Sparkles, useGLTF, useTexture } from '@react-three/drei';
-import { Bloom, EffectComposer } from '@react-three/postprocessing';
+import { Bloom, EffectComposer, Glitch, Noise } from '@react-three/postprocessing';
+import { GlitchMode } from 'postprocessing';
+import * as THREE from 'three';
+import { useGlitch } from './hooks/glitch.js';
 
 function App() {
+  const glitchActive = useGlitch();
+
   return (
-    // <Canvas shadows camera={{ position: [3, 3, 3], fov: 30 }}>
-    <Canvas concurrent gl={{ alpha: false }} pixelRatio={[1, 1.5]} camera={{ position: [0, 3, 100], fov: 30 }}>
+    <Canvas concurrent gl={{ alpha: false }} camera={{ position: [0, 3, 100], fov: 30 }}>
       <color attach="background" args={['black']} />
       <fog attach="fog" args={['black', 15, 20]} />
       <Suspense fallback={null}>
@@ -17,12 +20,20 @@ function App() {
         </group>
         <EffectComposer>
           <Bloom mipmapBlur intensity={1.2} />
+          <Glitch
+            active={glitchActive}
+            delay={[0.5, 1.5]}
+            duration={[0.6, 1.0]}
+            strength={[0.1, 0.2]}
+            mode={GlitchMode.CONSTANT_MILD}
+            ratio={0.85}
+          />
+          <Noise opacity={0.05} />
         </EffectComposer>
         <ambientLight intensity={0.5} />
         <spotLight position={[0, 10, 0]} intensity={0.3} />
         <directionalLight position={[-50, 0, -40]} intensity={0.7} />
-        {/*<Environment preset="sunset" />*/}
-        <Intro />
+        <CameraPositionControl />
       </Suspense>
     </Canvas>
   );
@@ -75,7 +86,7 @@ function Ground() {
   );
 }
 
-function Intro() {
+function CameraPositionControl() {
   const [vec] = useState(() => new THREE.Vector3());
   return useFrame((state) => {
     state.camera.position.lerp(vec.set(state.mouse.x * 5, 3 + state.mouse.y * 2, 14), 0.05);
