@@ -7,7 +7,6 @@ import { Bloom, EffectComposer, Glitch, Noise } from '@react-three/postprocessin
 import { GlitchMode } from 'postprocessing';
 import { useGlitch } from './hooks/glitch.js';
 import { isSceneLoadedAtom } from './atoms.js';
-import { LinearSRGBColorSpace } from 'three';
 
 function App() {
   const glitchActive = useGlitch();
@@ -61,7 +60,7 @@ function PDLogo(props) {
   const { nodes } = useGLTF('/pd-lp-1.1.glb');
   return (
     <group {...props} dispose={null}>
-      <Sparkles count={1000} scale={[20, 20, 10]} size={1.5} speed={2} />
+      <Sparkles count={500} scale={[20, 20, 10]} size={1.5} speed={2} />
       <mesh
         geometry={nodes.Curve.geometry}
         material={glowBlue}
@@ -83,7 +82,7 @@ function Ground(props) {
           metalness={0}
           roughnessMap={roughness}
           normalMap={normal}
-          normalMap-colorSpace={LinearSRGBColorSpace}
+          normalMap-colorSpace={THREE.LinearSRGBColorSpace}
           normalScale={[2, 2]}
           {...props}
         />
@@ -99,6 +98,5 @@ function CameraPositionControl() {
     state.camera.lookAt(0, 0, 0);
   });
 }
-
 
 export default App;
