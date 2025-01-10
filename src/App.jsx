@@ -2,11 +2,12 @@ import { Suspense, useEffect, useState } from 'react';
 import * as THREE from 'three';
 import { useAtom } from 'jotai';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { MeshReflectorMaterial, Sparkles, useGLTF, useTexture } from '@react-three/drei';
+import { Reflector, Sparkles, useGLTF, useTexture } from '@react-three/drei';
 import { Bloom, EffectComposer, Glitch, Noise } from '@react-three/postprocessing';
 import { GlitchMode } from 'postprocessing';
 import { useGlitch } from './hooks/glitch.js';
 import { isSceneLoadedAtom } from './atoms.js';
+import { LinearSRGBColorSpace } from 'three';
 
 function App() {
   const glitchActive = useGlitch();
@@ -23,10 +24,14 @@ function App() {
       <color attach="background" args={['black']} />
       <fog attach="fog" args={['black', 15, 20]} />
       <Suspense fallback={null}>
-        <group position={[0, 0, 0]}>
-          <PDLogo rotation={[1.5, 0, 0]} position={[0, 1.6, 1]} scale={[2.5, 2.5, 2.5]} />
-          <Ground />
-        </group>
+        <PDLogo rotation={[Math.PI / 2, 0, 0]} position={[0, 1.6, 1]} scale={[2.5, 2.5, 2.5]} />
+        <Ground mirror={1}
+                blur={[500, 100]}
+                mixBlur={12}
+                mixStrength={0.5}
+                rotation={[-Math.PI / 2, 0, 0]}
+                position={[0, 0, 0]}
+        />
         <EffectComposer>
           <Bloom mipmapBlur intensity={1.2} />
           <Glitch
@@ -41,7 +46,7 @@ function App() {
         </EffectComposer>
         <ambientLight intensity={0.5} />
         <spotLight position={[0, 10, 0]} intensity={0.3} />
-        <directionalLight position={[-50, 0, -40]} intensity={0.7} />
+        <directionalLight position={[0, 0, 0]} />
         <CameraPositionControl />
       </Suspense>
     </Canvas>
@@ -67,31 +72,23 @@ function PDLogo(props) {
   );
 }
 
-function Ground() {
-  const [floor] = useTexture(['/SurfaceImperfections003_1K_var1.jpg', '/SurfaceImperfections003_1K_Normal.jpg']);
+function Ground(props) {
+  const [roughness, normal] = useTexture(['/SurfaceImperfections003_1K_var1.jpg', '/SurfaceImperfections003_1K_Normal.jpg']);
+
   return (
-    <mesh position-y={0} rotation-x={-Math.PI / 2}>
-      <planeGeometry args={[100, 100]} />
-      <MeshReflectorMaterial
-        // reflectorOffset={-5}
-        roughnessMap={floor}
-        // normalMap={normal}
-        roughness={1.2}
-        resolution={512}
-        blur={[400, 100]}
-        mixBlur={1}
-        depthScale={1}
-        opacity={0.5}
-        transparent
-        minDepthThreshold={0.4}
-        maxDepthThreshold={1.4}
-        color="#333"
-        metalness={0.5}
-        mixStrength={5.5} // Strength of the reflections
-        mixContrast={1} // Contrast of the reflections
-        dithering
-        mirror={0.5} />
-    </mesh>
+    <Reflector resolution={1024} args={[100, 100]} {...props}>
+      {(Material, props) => (
+        <Material
+          color="#f0f0f0"
+          metalness={0}
+          roughnessMap={roughness}
+          normalMap={normal}
+          normalMap-colorSpace={LinearSRGBColorSpace}
+          normalScale={[2, 2]}
+          {...props}
+        />
+      )}
+    </Reflector>
   );
 }
 
