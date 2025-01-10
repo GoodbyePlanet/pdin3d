@@ -5,8 +5,8 @@ import { isSceneLoadedAtom } from '../atoms.js';
 
 import './Footer.css';
 
-export default function Footer() {
-  const [sceneLoaded, __] = useAtom(isSceneLoadedAtom);
+export default function Footer({onGoToPDClick}) {
+  const [sceneLoaded, _] = useAtom(isSceneLoadedAtom);
 
   if (!sceneLoaded) {
     return null;
@@ -18,7 +18,7 @@ export default function Footer() {
         <Gears />
       </div>
       <div className="item">
-        <div className="pulsating-circle"></div>
+        <div onClick={onGoToPDClick} className="pulsating-circle"></div>
       </div>
       <div className="item">
         <SoundIcon />

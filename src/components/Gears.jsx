@@ -1,7 +1,7 @@
 import './Gears.css';
 
 export default function Gears() {
-  const handleAuthorClick = () => window.open('https://github.com/GoodbyePlanet', '_blank');
+  const handleAuthorClick = () => window.open('https://github.com/GoodbyePlanet', "_blank");
 
   return (
     <div onClick={handleAuthorClick} className="wrapper">

@@ -1,7 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { useAtom } from 'jotai';
+import { isGlitchActiveAtom } from '../atoms.js';
 
 export const useGlitch = () => {
-  const [glitchActive, setGlitchActive] = useState(false);
+  const [glitchActive, setGlitchActive] = useAtom(isGlitchActiveAtom);
 
   useEffect(() => {
     const handleMouseDown = () => setGlitchActive(true);
@@ -17,4 +19,4 @@ export const useGlitch = () => {
   }, []);
 
   return glitchActive;
-}
+};

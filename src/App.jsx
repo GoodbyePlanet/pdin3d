@@ -6,11 +6,13 @@ import { Reflector, Sparkles, useGLTF, useTexture } from '@react-three/drei';
 import { Bloom, EffectComposer, Glitch, Noise } from '@react-three/postprocessing';
 import { GlitchMode } from 'postprocessing';
 import { useGlitch } from './hooks/glitch.js';
-import { isSceneLoadedAtom } from './atoms.js';
+import { isGlitchActiveAtom, isSceneLoadedAtom } from './atoms.js';
+import Footer from './components/Footer.jsx';
 
 function App() {
   const glitchActive = useGlitch();
-  const [__, setSceneLoaded] = useAtom(isSceneLoadedAtom);
+  const [_, setSceneLoaded] = useAtom(isSceneLoadedAtom);
+  const [__, setGlitchActive] = useAtom(isGlitchActiveAtom);
 
   useEffect(() => {
     setTimeout(() => {
@@ -18,37 +20,47 @@ function App() {
     }, 2700);
   }, []);
 
+  const handleGoToPD = () => {
+    setGlitchActive(true);
+    setTimeout(() => {
+      window.open('https://productdock.com', '_self');
+    }, 2000);
+  };
+
   return (
-    <Canvas concurrent gl={{ alpha: false }} camera={{ position: [0, 3, 100], fov: 30 }}>
-      <color attach="background" args={['black']} />
-      <fog attach="fog" args={['black', 15, 20]} />
-      <Suspense fallback={null}>
-        <PDLogo rotation={[Math.PI / 2, 0, 0]} position={[0, 1.6, 1]} scale={[2.5, 2.5, 2.5]} />
-        <Ground mirror={1}
-                blur={[500, 100]}
-                mixBlur={12}
-                mixStrength={0.5}
-                rotation={[-Math.PI / 2, 0, 0]}
-                position={[0, 0, 0]}
-        />
-        <EffectComposer>
-          <Bloom mipmapBlur intensity={1.2} />
-          <Glitch
-            active={glitchActive}
-            delay={[1.5, 3.5]}
-            duration={[0.6, 1.0]}
-            strength={[0.1, 0.2]}
-            mode={GlitchMode.CONSTANT_MILD}
-            ratio={0.85}
+    <>
+      <Canvas concurrent gl={{ alpha: false }} camera={{ position: [0, 3, 100], fov: 30 }}>
+        <color attach="background" args={['black']} />
+        <fog attach="fog" args={['black', 15, 20]} />
+        <Suspense fallback={null}>
+          <PDLogo rotation={[Math.PI / 2, 0, 0]} position={[0, 1.6, 1]} scale={[2.5, 2.5, 2.5]} />
+          <Ground mirror={1}
+                  blur={[500, 100]}
+                  mixBlur={12}
+                  mixStrength={0.5}
+                  rotation={[-Math.PI / 2, 0, 0]}
+                  position={[0, 0, 0]}
           />
-          <Noise opacity={0.05} />
-        </EffectComposer>
-        <ambientLight intensity={0.5} />
-        <spotLight position={[0, 10, 0]} intensity={0.3} />
-        <directionalLight position={[0, 0, 0]} />
-        <CameraPositionControl />
-      </Suspense>
-    </Canvas>
+          <EffectComposer>
+            <Bloom mipmapBlur intensity={1.2} />
+            <Glitch
+              active={glitchActive}
+              delay={[1.5, 3.5]}
+              duration={[0.6, 1.0]}
+              strength={[0.1, 0.2]}
+              mode={GlitchMode.CONSTANT_WILD}
+              ratio={0.85}
+            />
+            <Noise opacity={0.07} />
+          </EffectComposer>
+          <ambientLight intensity={0.5} />
+          <spotLight position={[0, 10, 0]} intensity={0.3} />
+          <directionalLight position={[0, 0, 0]} />
+          <CameraPositionControl />
+        </Suspense>
+      </Canvas>
+      <Footer onGoToPDClick={handleGoToPD} />
+    </>
   );
 }
 
