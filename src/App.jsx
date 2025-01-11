@@ -1,19 +1,17 @@
 import { Suspense, useEffect, useState } from 'react';
 import * as THREE from 'three';
 import { useAtom } from 'jotai';
+import { GlitchMode } from 'postprocessing';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Reflector, Sparkles, useGLTF, useTexture } from '@react-three/drei';
 import { Bloom, EffectComposer, Glitch, Noise } from '@react-three/postprocessing';
-import { GlitchMode } from 'postprocessing';
-import { useGlitch } from './hooks/glitch.js';
 import { isGlitchActiveAtom, isSceneLoadedAtom } from './atoms.js';
 import Footer from './components/Footer.jsx';
 import Sound from './components/Sound.jsx';
 
 function App() {
-  const glitchActive = useGlitch();
   const [_, setSceneLoaded] = useAtom(isSceneLoadedAtom);
-  const [__, setGlitchActive] = useAtom(isGlitchActiveAtom);
+  const [isGlitchActive, setGlitchActive] = useAtom(isGlitchActiveAtom);
 
   useEffect(() => {
     setTimeout(() => {
@@ -45,7 +43,7 @@ function App() {
           <EffectComposer>
             <Bloom mipmapBlur intensity={1.2} />
             <Glitch
-              active={glitchActive}
+              active={isGlitchActive}
               delay={[1.5, 3.5]}
               duration={[0.6, 1.0]}
               strength={[0.1, 0.2]}
