@@ -1,6 +1,6 @@
 {
-  "name": "r3f-vite-starter",
-  "private": true,
+  "name": "pdlp",
+  "private": false,
   "version": "1.0.0",
   "type": "module",
   "scripts": {
