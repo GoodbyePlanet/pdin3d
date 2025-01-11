@@ -28,11 +28,15 @@ export default function Footer({onGoToPDClick}) {
 
     window.addEventListener('mousedown', handleMouseDown);
     window.addEventListener('mouseup', handleMouseUp);
+    window.addEventListener('touchstart', handleMouseDown);
+    window.addEventListener('touchend', handleMouseUp);
 
     return () => {
       window.removeEventListener('mousedown', handleMouseDown);
       window.removeEventListener('mouseup', handleMouseUp);
-    };
+      window.addEventListener('touchstart', handleMouseDown);
+      window.addEventListener('touchend', handleMouseUp);
+   };
   }, []);
 
   const handleSoundEnable = () => setIsSoundEnabled(!soundEnabled);

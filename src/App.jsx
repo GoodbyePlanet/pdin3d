@@ -8,10 +8,12 @@ import { Bloom, EffectComposer, Glitch, Noise } from '@react-three/postprocessin
 import { isGlitchActiveAtom, isSceneLoadedAtom } from './atoms.js';
 import Footer from './components/Footer.jsx';
 import Sound from './components/Sound.jsx';
+import useIsMobile from './hooks/useIsMobileDevice.js';
 
-function App() {
+export default function App() {
   const [_, setSceneLoaded] = useAtom(isSceneLoadedAtom);
   const [isGlitchActive, setGlitchActive] = useAtom(isGlitchActiveAtom);
+  const isMobileDevice = useIsMobile();
 
   useEffect(() => {
     setTimeout(() => {
@@ -32,7 +34,8 @@ function App() {
         <color attach="background" args={['black']} />
         <fog attach="fog" args={['black', 15, 20]} />
         <Suspense fallback={null}>
-          <PDLogo rotation={[Math.PI / 2, 0, 0]} position={[0, 1.6, 1]} scale={[2.5, 2.5, 2.5]} />
+          <PDLogo isMobileDevice={isMobileDevice} rotation={[Math.PI / 2, 0, 0]} position={[0, 1.6, 1]}
+                  scale={[2.5, 2.5, 2.5]} />
           <Ground mirror={1}
                   blur={[500, 100]}
                   mixBlur={12}
@@ -68,11 +71,11 @@ function PDLogo(props) {
   const blue = new THREE.Color('#2BB3FF');
   blue.multiplyScalar(4);
   const glowBlue = new THREE.MeshBasicMaterial({ color: blue, toneMapped: false });
-
   const { nodes } = useGLTF('/pd-lp-1.1.glb');
+
   return (
     <group {...props} dispose={null}>
-      <Sparkles count={500} scale={[20, 20, 10]} size={1.5} speed={2} />
+      {!props.isMobileDevice && <Sparkles count={500} scale={[20, 20, 10]} size={1.5} speed={2} />}
       <mesh
         geometry={nodes.Curve.geometry}
         material={glowBlue}
@@ -111,5 +114,3 @@ function CameraPositionControl() {
     state.camera.lookAt(0, 0, 0);
   });
 }
-
-export default App;
