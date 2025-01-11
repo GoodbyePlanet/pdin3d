@@ -1,12 +1,15 @@
 import { useAtom } from 'jotai';
 import Gears from './Gears.jsx';
 import SoundIcon from './SoundIcon.jsx';
-import { isSceneLoadedAtom } from '../atoms.js';
+import { isSceneLoadedAtom, isSoundEnabledAtom } from '../atoms.js';
 
 import './Footer.css';
 
 export default function Footer({onGoToPDClick}) {
   const [sceneLoaded, _] = useAtom(isSceneLoadedAtom);
+  const [soundEnabled, setIsSoundEnabled] = useAtom(isSoundEnabledAtom);
+
+  const handleSoundEnable = () => setIsSoundEnabled(!soundEnabled);
 
   if (!sceneLoaded) {
     return null;
@@ -21,7 +24,7 @@ export default function Footer({onGoToPDClick}) {
         <div onClick={onGoToPDClick} className="pulsating-circle"></div>
       </div>
       <div className="item">
-        <SoundIcon />
+        <SoundIcon onSoundIconClick={handleSoundEnable} />
       </div>
     </div>
   );

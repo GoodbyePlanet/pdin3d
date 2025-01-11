@@ -8,6 +8,7 @@ import { GlitchMode } from 'postprocessing';
 import { useGlitch } from './hooks/glitch.js';
 import { isGlitchActiveAtom, isSceneLoadedAtom } from './atoms.js';
 import Footer from './components/Footer.jsx';
+import Sound from './components/Sound.jsx';
 
 function App() {
   const glitchActive = useGlitch();
@@ -57,6 +58,7 @@ function App() {
           <spotLight position={[0, 10, 0]} intensity={0.3} />
           <directionalLight position={[0, 0, 0]} />
           <CameraPositionControl />
+          <Sound />
         </Suspense>
       </Canvas>
       <Footer onGoToPDClick={handleGoToPD} />
@@ -84,7 +86,8 @@ function PDLogo(props) {
 }
 
 function Ground(props) {
-  const [roughness, normal] = useTexture(['/SurfaceImperfections003_1K_var1.jpg', '/SurfaceImperfections003_1K_Normal.jpg']);
+  const [roughness, normal] =
+    useTexture(['/SurfaceImperfections003_1K_var1.jpg', '/SurfaceImperfections003_1K_Normal.jpg']);
 
   return (
     <Reflector resolution={1024} args={[100, 100]} {...props}>
