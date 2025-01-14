@@ -10,8 +10,8 @@ export default function Sound() {
     <mesh>
       {soundEnabled && (
         <>
-          {!isBigNoise && <PositionalAudio autoplay loop url="/noise.mp3" distance={1} />}
-          {isBigNoise && <PositionalAudio autoplay loop url="/big_noise.mp3" distance={1} />}
+          {!isBigNoise && <PositionalAudio autoplay loop url="/sound/noise.mp3" distance={1} />}
+          {isBigNoise && <PositionalAudio autoplay loop url="/sound/big_noise.mp3" distance={1} />}
         </>
       )}
     </mesh>

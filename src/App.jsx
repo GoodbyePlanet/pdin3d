@@ -74,7 +74,7 @@ function PDLogo(props) {
   const blue = new THREE.Color('#2BB3FF');
   blue.multiplyScalar(4);
   const glowBlue = new THREE.MeshBasicMaterial({ color: blue, toneMapped: false });
-  const { nodes } = useGLTF('/pd-lp-1.1.glb');
+  const { nodes } = useGLTF('/models/pd-lp-1.1.glb');
 
   return (
     <group {...props} dispose={null}>
@@ -110,7 +110,7 @@ function PDSparkles(props) {
 
 function Ground(props) {
   const [roughness, normal] =
-    useTexture(['/SurfaceImperfections003_1K_var1.jpg', '/SurfaceImperfections003_1K_Normal.jpg']);
+    useTexture(['/textures/SurfaceImperfections003_1K_var1.jpg', '/textures/SurfaceImperfections003_1K_Normal.jpg']);
 
   return (
     <Reflector resolution={1024} args={[100, 100]} {...props}>
