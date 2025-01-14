@@ -62,8 +62,8 @@ export default function App() {
           <spotLight position={[0, 10, 0]} intensity={0.3} />
           <directionalLight position={[0, 0, 0]} />
           <CameraPositionControl />
-          <Sound />
         </Suspense>
+        <Sound />
       </Canvas>
       <Footer onGoToPDClick={handleGoToPD} />
     </>
