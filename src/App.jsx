@@ -34,8 +34,11 @@ export default function App() {
         <color attach="background" args={['black']} />
         <fog attach="fog" args={['black', 15, 20]} />
         <Suspense fallback={null}>
-          <PDLogo isMobileDevice={isMobileDevice} rotation={[Math.PI / 2, 0, 0]} position={[0, 1.6, 1]}
-                  scale={[2.5, 2.5, 2.5]} />
+          <PDLogo isMobileDevice={isMobileDevice}
+                  scale={[2.5, 2.5, 2.5]}
+                  rotation={[Math.PI / 2, 0, 0]}
+                  position={[0, 1.6, 1]}
+          />
           <Ground mirror={1}
                   blur={[500, 100]}
                   mixBlur={12}
@@ -75,7 +78,7 @@ function PDLogo(props) {
 
   return (
     <group {...props} dispose={null}>
-      {!props.isMobileDevice && <Sparkles count={500} scale={[20, 20, 10]} size={1.5} speed={2} />}
+      <PDSparkles isMobileDevice={props.isMobileDevice} />
       <mesh
         geometry={nodes.Curve.geometry}
         material={glowBlue}
@@ -84,6 +87,25 @@ function PDLogo(props) {
       />
     </group>
   );
+}
+
+function PDSparkles(props) {
+  const sparkleConfig = {
+    opacity: 1.5,
+    noise: [20, 20, 10],
+    count: 200,
+    scale: [2, 2, 2],
+    size: 1.5,
+    speed: 1,
+  };
+  const sparklesColors = ['#89CFF0', '#FF8C00'];
+
+  return !props.isMobileDevice &&
+    <>
+      {sparklesColors.map((color, index) => (
+        <Sparkles key={index} color={color} {...sparkleConfig} />
+      ))}
+    </>;
 }
 
 function Ground(props) {
