@@ -1,14 +1,16 @@
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { useAtom } from 'jotai';
 import { GlitchMode } from 'postprocessing';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Reflector, Sparkles, useGLTF, useTexture } from '@react-three/drei';
+import { PointMaterial, Points, Reflector, useGLTF, useTexture } from '@react-three/drei';
 import { Bloom, EffectComposer, Glitch, Noise } from '@react-three/postprocessing';
 import { isGlitchActiveAtom, isSceneLoadedAtom } from './atoms.js';
 import Footer from './components/Footer.jsx';
 import Sound from './components/Sound.jsx';
 import useIsMobile from './hooks/useIsMobileDevice.js';
+import * as random from 'maath/random/dist/maath-random.esm';
+
 
 export default function App() {
   const [_, setSceneLoaded] = useAtom(isSceneLoadedAtom);
@@ -18,7 +20,7 @@ export default function App() {
   useEffect(() => {
     setTimeout(() => {
       setSceneLoaded(true);
-    }, 2700);
+    }, 2000);
   }, []);
 
   const handleGoToPD = () => {
@@ -70,6 +72,22 @@ export default function App() {
   );
 }
 
+function Stars(props) {
+  const ref = useRef();
+  const [sphere] = useState(() => random.inSphere(new Float32Array(3000), { radius: 2 }));
+  useFrame((state, delta) => {
+    ref.current.rotation.x -= delta / 10;
+    ref.current.rotation.y -= delta / 15;
+  });
+  return (
+    <group rotation={[0, 0, Math.PI / 4]}>
+      <Points ref={ref} positions={sphere} stride={3} frustumCulled={false} {...props}>
+        <PointMaterial transparent color="#89CFF0" size={0.02} sizeAttenuation={true} depthWrite={false} />
+      </Points>
+    </group>
+  );
+}
+
 function PDLogo(props) {
   const blue = new THREE.Color('#2BB3FF');
   blue.multiplyScalar(4);
@@ -78,7 +96,7 @@ function PDLogo(props) {
 
   return (
     <group {...props} dispose={null}>
-      <PDSparkles isMobileDevice={props.isMobileDevice} />
+      <Stars />
       <mesh
         geometry={nodes.Curve.geometry}
         material={glowBlue}
@@ -87,25 +105,6 @@ function PDLogo(props) {
       />
     </group>
   );
-}
-
-function PDSparkles(props) {
-  const sparkleConfig = {
-    opacity: 1.5,
-    noise: [20, 20, 10],
-    count: 200,
-    scale: [2, 2, 2],
-    size: 1.5,
-    speed: 1,
-  };
-  const sparklesColors = ['#89CFF0', '#FF8C00'];
-
-  return !props.isMobileDevice &&
-    <>
-      {sparklesColors.map((color, index) => (
-        <Sparkles key={index} color={color} {...sparkleConfig} />
-      ))}
-    </>;
 }
 
 function Ground(props) {
