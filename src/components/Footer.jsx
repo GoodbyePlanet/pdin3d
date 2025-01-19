@@ -3,9 +3,9 @@ import { useAtom } from 'jotai';
 import Gears from './Gears.jsx';
 import SoundIcon from './SoundIcon.jsx';
 import { isBigNoiseActiveAtom, isGlitchActiveAtom, isSceneLoadedAtom, isSoundEnabledAtom } from '../atoms.js';
+import useIsMobile from '../hooks/useIsMobileDevice.js';
 
 import './Footer.css';
-import useIsMobile from '../hooks/useIsMobileDevice.js';
 
 export default function Footer({onGoToPDClick}) {
   const noGlitchHereRef = useRef();
@@ -30,17 +30,19 @@ export default function Footer({onGoToPDClick}) {
       setIsGlitchActive(false);
       setIsBigNoiseActive(false);
     }
+    const handleTouchStart = () => setIsGlitchActive(false);
+    const handleTouchEnd = () => setIsGlitchActive(false);
 
     window.addEventListener('mousedown', handleMouseDown);
     window.addEventListener('mouseup', handleMouseUp);
-    window.addEventListener('touchstart', handleMouseDown);
-    window.addEventListener('touchend', handleMouseUp);
+    window.addEventListener('touchstart', handleTouchStart);
+    window.addEventListener('touchend', handleTouchEnd);
 
     return () => {
       window.removeEventListener('mousedown', handleMouseDown);
       window.removeEventListener('mouseup', handleMouseUp);
-      window.addEventListener('touchstart', handleMouseDown);
-      window.addEventListener('touchend', handleMouseUp);
+      window.addEventListener('touchstart', handleTouchStart);
+      window.addEventListener('touchend', handleTouchEnd);
    };
   }, []);
 
