@@ -1,10 +1,11 @@
+import { useEffect, useRef } from 'react';
 import { useAtom } from 'jotai';
 import Gears from './Gears.jsx';
 import SoundIcon from './SoundIcon.jsx';
 import { isBigNoiseActiveAtom, isGlitchActiveAtom, isSceneLoadedAtom, isSoundEnabledAtom } from '../atoms.js';
 
 import './Footer.css';
-import { useEffect, useRef } from 'react';
+import useIsMobile from '../hooks/useIsMobileDevice.js';
 
 export default function Footer({onGoToPDClick}) {
   const noGlitchHereRef = useRef();
@@ -12,14 +13,18 @@ export default function Footer({onGoToPDClick}) {
   const [soundEnabled, setIsSoundEnabled] = useAtom(isSoundEnabledAtom);
   const [__, setIsGlitchActive] = useAtom(isGlitchActiveAtom);
   const [___, setIsBigNoiseActive] = useAtom(isBigNoiseActiveAtom);
+  const isMobileDevice = useIsMobile();
 
   useEffect(() => {
     const handleMouseDown = (event) => {
       if (noGlitchHereRef.current && noGlitchHereRef.current.contains(event.target)) {
         return; // Exit early, we don't want glitch when clicking on buttons
       }
-      setIsGlitchActive(true);
-      setIsBigNoiseActive(true);
+
+      if (!isMobileDevice) {
+        setIsGlitchActive(true);
+        setIsBigNoiseActive(true);
+      }
     }
     const handleMouseUp = () => {
       setIsGlitchActive(false);

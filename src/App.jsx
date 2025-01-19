@@ -8,14 +8,11 @@ import { Bloom, EffectComposer, Glitch, Noise } from '@react-three/postprocessin
 import { isGlitchActiveAtom, isSceneLoadedAtom } from './atoms.js';
 import Footer from './components/Footer.jsx';
 import Sound from './components/Sound.jsx';
-import useIsMobile from './hooks/useIsMobileDevice.js';
 import * as random from 'maath/random/dist/maath-random.esm';
-
 
 export default function App() {
   const [_, setSceneLoaded] = useAtom(isSceneLoadedAtom);
   const [isGlitchActive, setGlitchActive] = useAtom(isGlitchActiveAtom);
-  const isMobileDevice = useIsMobile();
 
   useEffect(() => {
     setTimeout(() => {
@@ -36,17 +33,18 @@ export default function App() {
         <color attach="background" args={['black']} />
         <fog attach="fog" args={['black', 15, 20]} />
         <Suspense fallback={null}>
-          <PDLogo isMobileDevice={isMobileDevice}
-                  scale={[2.5, 2.5, 2.5]}
-                  rotation={[Math.PI / 2, 0, 0]}
-                  position={[0, 1.6, 1]}
+          <PDLogo
+            scale={[2.5, 2.5, 2.5]}
+            rotation={[Math.PI / 2, 0, 0]}
+            position={[0, 1.6, 1]}
           />
-          <Ground mirror={1}
-                  blur={[500, 100]}
-                  mixBlur={12}
-                  mixStrength={0.5}
-                  rotation={[-Math.PI / 2, 0, 0]}
-                  position={[0, 0, 0]}
+          <Ground
+            mirror={1}
+            blur={[500, 100]}
+            mixBlur={12}
+            mixStrength={0.5}
+            rotation={[-Math.PI / 2, 0, 0]}
+            position={[0, 0, 0]}
           />
           <EffectComposer>
             <Bloom mipmapBlur intensity={1.2} />
