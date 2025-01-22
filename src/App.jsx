@@ -2,7 +2,7 @@ import { Suspense, useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { useAtom } from 'jotai';
 import { GlitchMode } from 'postprocessing';
-import { Canvas, useFrame } from '@react-three/fiber';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { PointMaterial, Points, Reflector, useGLTF, useTexture } from '@react-three/drei';
 import { Bloom, EffectComposer, Glitch, Noise } from '@react-three/postprocessing';
 import { isGlitchActiveAtom, isSceneLoadedAtom } from './atoms.js';
@@ -72,15 +72,26 @@ export default function App() {
 
 function Stars(props) {
   const ref = useRef();
+  const { pointer } = useThree();
   const [sphere] = useState(() => random.inSphere(new Float32Array(3000), { radius: 2 }));
+  const [materialColor, setMaterialColor] = useState(new THREE.Color('#89CFF0')); // Default to blue
+
   useFrame((_, delta) => {
     ref.current.rotation.x -= delta / 10;
     ref.current.rotation.y -= delta / 15;
+
+    // Interpolate color based on mouse position
+    const orange = new THREE.Color('#FFA500');
+    const blue = new THREE.Color('#89CFF0');
+    const t = (pointer.x + 1) / 2; // Normalize mouse.x from [-1, 1] to [0, 1]
+    const newColor = orange.clone().lerp(blue, t); // Interpolate between orange and blue
+    setMaterialColor(newColor);
   });
+
   return (
     <group rotation={[2, 0, Math.PI / 4]}>
       <Points ref={ref} positions={sphere} stride={3} frustumCulled={false} {...props}>
-        <PointMaterial transparent color="#89CFF0" size={0.02} sizeAttenuation={true} depthWrite={false} />
+        <PointMaterial transparent color={materialColor} size={0.02} sizeAttenuation={true} depthWrite={false} />
       </Points>
     </group>
   );
@@ -128,8 +139,9 @@ function Ground(props) {
 
 function CameraPositionControl() {
   const [vec] = useState(() => new THREE.Vector3());
+
   return useFrame((state) => {
-    state.camera.position.lerp(vec.set(state.mouse.x * 5, 3 + state.mouse.y * 2, 14), 0.05);
+    state.camera.position.lerp(vec.set(state.pointer.x * 5, 3 + state.pointer.y * 2, 14), 0.05);
     state.camera.lookAt(0, 0, 0);
   });
 }
