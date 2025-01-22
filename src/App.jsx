@@ -10,6 +10,10 @@ import Footer from './components/Footer.jsx';
 import Sound from './components/Sound.jsx';
 import * as random from 'maath/random/dist/maath-random.esm';
 
+const LIGHT_BLUE = '#89CFF0';
+const DARK_BLUE = '#00A3CC';
+const GREY = '#F0F0F0';
+
 export default function App() {
   const [_, setSceneLoaded] = useAtom(isSceneLoadedAtom);
   const [isGlitchActive, setGlitchActive] = useAtom(isGlitchActiveAtom);
@@ -72,17 +76,17 @@ export default function App() {
 
 function Stars(props) {
   const ref = useRef();
-  const { pointer } = useThree();
   const [sphere] = useState(() => random.inSphere(new Float32Array(3000), { radius: 2 }));
-  const [materialColor, setMaterialColor] = useState(new THREE.Color('#89CFF0')); // Default to blue
+  const { pointer } = useThree();
+  const [materialColor, setMaterialColor] = useState(new THREE.Color(LIGHT_BLUE));
 
   useFrame((_, delta) => {
     ref.current.rotation.x -= delta / 10;
     ref.current.rotation.y -= delta / 15;
 
     // Interpolate color based on mouse position
-    const orange = new THREE.Color('#FFA500');
-    const blue = new THREE.Color('#89CFF0');
+    const orange = new THREE.Color(DARK_BLUE);
+    const blue = new THREE.Color(LIGHT_BLUE);
     const t = (pointer.x + 1) / 2; // Normalize mouse.x from [-1, 1] to [0, 1]
     const newColor = orange.clone().lerp(blue, t); // Interpolate between orange and blue
     setMaterialColor(newColor);
@@ -93,26 +97,22 @@ function Stars(props) {
       <Points ref={ref} positions={sphere} stride={3} frustumCulled={false} {...props}>
         <PointMaterial transparent color={materialColor} size={0.025} sizeAttenuation={true} depthWrite={false} />
       </Points>
-      {/* <Points ref={ref} positions={sphere} stride={3} frustumCulled={false} {...props}>
-        <PointMaterial transparent color={materialColor} size={0.04} sizeAttenuation={true} depthWrite={false} />
-      </Points> */}
     </group>
   );
 }
 
 function PDLogo(props) {
-  const blue = new THREE.Color('#2BB3FF');
+  const blue = new THREE.Color(LIGHT_BLUE);
   blue.multiplyScalar(4);
-  const glowBlue = new THREE.MeshBasicMaterial({ color: blue, toneMapped: false });
+  const [materialColor, setMaterialColor] = useState(new THREE.MeshBasicMaterial({ color: blue, toneMapped: false }));
+
   const { nodes } = useGLTF('/models/pd-lp-1.1.glb');
   const { pointer } = useThree();
-  const [materialColor, setMaterialColor] = useState(new THREE.MeshBasicMaterial({ color: blue, toneMapped: false })); // Default to blue
 
-  useFrame((_, delta) => {
-    // Interpolate color based on mouse position
-    const orange = new THREE.Color('#FFA500');
+  useFrame(() => {
+    const orange = new THREE.Color(DARK_BLUE);
     orange.multiplyScalar(4);
-    const blue = new THREE.Color('#89CFF0');
+    const blue = new THREE.Color(LIGHT_BLUE);
     blue.multiplyScalar(4);
     const t = (pointer.x + 1) / 2; // Normalize mouse.x from [-1, 1] to [0, 1]
     const newColor = orange.clone().lerp(blue, t); // Interpolate between orange and blue
@@ -123,7 +123,7 @@ function PDLogo(props) {
 
   return (
     <group {...props} dispose={null}>
-      <Stars />
+      <Stars color={materialColor} />
       <mesh
         geometry={nodes.Curve.geometry}
         material={materialColor}
@@ -142,7 +142,7 @@ function Ground(props) {
     <Reflector resolution={1024} args={[100, 100]} {...props}>
       {(Material, props) => (
         <Material
-          color="#f0f0f0"
+          color={GREY}
           metalness={0}
           roughnessMap={roughness}
           normalMap={normal}
