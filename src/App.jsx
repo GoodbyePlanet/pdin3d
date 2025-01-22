@@ -73,12 +73,12 @@ export default function App() {
 function Stars(props) {
   const ref = useRef();
   const [sphere] = useState(() => random.inSphere(new Float32Array(3000), { radius: 2 }));
-  useFrame((state, delta) => {
+  useFrame((_, delta) => {
     ref.current.rotation.x -= delta / 10;
     ref.current.rotation.y -= delta / 15;
   });
   return (
-    <group rotation={[0, 0, Math.PI / 4]}>
+    <group rotation={[2, 0, Math.PI / 4]}>
       <Points ref={ref} positions={sphere} stride={3} frustumCulled={false} {...props}>
         <PointMaterial transparent color="#89CFF0" size={0.02} sizeAttenuation={true} depthWrite={false} />
       </Points>
