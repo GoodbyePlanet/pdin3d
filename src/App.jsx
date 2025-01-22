@@ -91,8 +91,11 @@ function Stars(props) {
   return (
     <group rotation={[2, 0, Math.PI / 4]}>
       <Points ref={ref} positions={sphere} stride={3} frustumCulled={false} {...props}>
-        <PointMaterial transparent color={materialColor} size={0.02} sizeAttenuation={true} depthWrite={false} />
+        <PointMaterial transparent color={materialColor} size={0.025} sizeAttenuation={true} depthWrite={false} />
       </Points>
+      {/* <Points ref={ref} positions={sphere} stride={3} frustumCulled={false} {...props}>
+        <PointMaterial transparent color={materialColor} size={0.04} sizeAttenuation={true} depthWrite={false} />
+      </Points> */}
     </group>
   );
 }
