@@ -102,13 +102,28 @@ function PDLogo(props) {
   blue.multiplyScalar(4);
   const glowBlue = new THREE.MeshBasicMaterial({ color: blue, toneMapped: false });
   const { nodes } = useGLTF('/models/pd-lp-1.1.glb');
+  const { pointer } = useThree();
+  const [materialColor, setMaterialColor] = useState(new THREE.MeshBasicMaterial({ color: blue, toneMapped: false })); // Default to blue
+
+  useFrame((_, delta) => {
+    // Interpolate color based on mouse position
+    const orange = new THREE.Color('#FFA500');
+    orange.multiplyScalar(4);
+    const blue = new THREE.Color('#89CFF0');
+    blue.multiplyScalar(4);
+    const t = (pointer.x + 1) / 2; // Normalize mouse.x from [-1, 1] to [0, 1]
+    const newColor = orange.clone().lerp(blue, t); // Interpolate between orange and blue
+
+    const c = new THREE.MeshBasicMaterial({ color: newColor, toneMapped: false });
+    setMaterialColor(c);
+  });
 
   return (
     <group {...props} dispose={null}>
       <Stars />
       <mesh
         geometry={nodes.Curve.geometry}
-        material={glowBlue}
+        material={materialColor}
         position={[-1.759, 0, 1.392]}
         scale={31.937}
       />
