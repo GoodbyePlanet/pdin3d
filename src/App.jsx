@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import { useAtom } from 'jotai';
 import { GlitchMode } from 'postprocessing';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { Fluid } from '@whatisjery/react-fluid-distortion';
 import { PointMaterial, Points, Reflector, useGLTF, useTexture } from '@react-three/drei';
 import { Bloom, EffectComposer, Glitch, Noise } from '@react-three/postprocessing';
 import { isGlitchActiveAtom, isSceneLoadedAtom } from './atoms.js';
@@ -51,6 +52,19 @@ export default function App() {
             position={[0, 0, 0]}
           />
           <EffectComposer>
+            <Fluid
+             intensity={2}
+             force={1.1}
+             distortion={0.40}
+             curl={1.9}
+             swirl={20}
+             fluidColor={LIGHT_BLUE}
+             blend={0}
+             pressure={0.8}
+             densityDissipation={0.88}
+             velocityDissipation={1}
+             radius={0.58}
+             />
             <Bloom mipmapBlur intensity={1.2} />
             <Glitch
               active={isGlitchActive}
